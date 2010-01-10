@@ -15,9 +15,19 @@ then
   append=1
 fi
 
-wget -O $XML_FILE "http://twitter.com/statuses/user_timeline/${XML_FILE}?${opt}"
+echo "hoge" > ${LIST_FILE}.new
 
-./xml2lst.sed $XML_FILE | perl -CO -mHTML::Entities -lne 'print HTML::Entities::decode($_)' > $LIST_FILE
+page=1
+opt="&${opt}"
+while [ -s ${LIST_FILE}.new ]
+do
+  wget -O $XML_FILE "http://twitter.com/statuses/user_timeline/${XML_FILE}?page=${page}${opt}"
+./xml2lst.sed $XML_FILE | perl -CO -mHTML::Entities -lne 'print HTML::Entities::decode($_)' > ${LIST_FILE}.new
+  cat ${LIST_FILE}.new >> $LIST_FILE
+  page=`expr $page + 1`
+done
+
+rm ${LIST_FILE}.new
 
 if [ $append -eq 1 ]
 then
