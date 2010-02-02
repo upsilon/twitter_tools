@@ -1,6 +1,6 @@
 #!/bin/sh
 
-USER_NAME=kim_upsilon
+USER_NAME=$1
 XML_FILE=${USER_NAME}.xml
 LIST_FILE=${USER_NAME}.lst
 
